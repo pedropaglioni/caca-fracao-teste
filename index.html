@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Caça-Fração</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#07111f;color:#f8fafc;font-family:monospace}
+body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+main{width:min(96vw,1024px);aspect-ratio:4/3;max-height:96vh;border:4px solid #35dc82;background:#0b1728;display:flex;flex-direction:column;padding:16px;gap:10px}
+header{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:2px solid #29445a;padding-bottom:8px}
+h1{font-size:clamp(18px,3vw,30px);margin:0;color:#ffe66d}#stats{font-size:clamp(12px,1.6vw,17px);text-align:right}
+#message{min-height:2.5em;font-size:clamp(14px,1.8vw,20px);line-height:1.3;color:#d8e7f5}
+#board{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+canvas{width:min(100%,680px);height:auto;max-height:100%;image-rendering:pixelated;aspect-ratio:4/3;border:2px solid #29445a}
+#panel{font-size:clamp(13px,1.7vw,18px);line-height:1.45;min-height:4.2em;color:#c9d8e8}
+strong{color:#ffe66d}
+@media(max-aspect-ratio:1/1){main{width:98vw;padding:8px;gap:5px}}
+</style></head>
+<body><main>
+<header><h1>CAÇA-FRAÇÃO</h1><div id="stats">CRISTAIS: 0/5<br>PONTOS: 0</div></header>
+<div id="message">Encontre os cristais no labirinto. Cada cristal libera uma questão de frações!</div>
+<div id="board"><canvas id="game" width="640" height="420" aria-label="Labirinto do jogo"></canvas></div>
+<div id="panel">Setas: mover / escolher resposta · Enter: confirmar · X: iniciar<br>Responda corretamente para abrir a saída. Arte original em pixel art.</div>
+</main>
+<script>
+(()=>{
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+const msg=document.getElementById('message'),panel=document.getElementById('panel'),stats=document.getElementById('stats');
+const raw=[
+["Qual fração representa metade?",["1/3","1/2","2/3","1/4"],1,"Metade divide o inteiro em duas partes iguais."],
+["Qual fração equivale a 1/2?",["2/3","2/4","3/5","1/3"],1,"Multiplique o numerador e o denominador por 2: 2/4."],
+["Quanto é 1/4 + 1/4?",["1/2","1/4","2/8","1"],0,"2/4 simplifica para 1/2."],
+["Qual é maior?",["1/3","1/2","São iguais","Não dá para saber"],1,"Metade é maior que um terço."],
+["Quanto é 3/4 de 8?",["4","5","6","7"],2,"8 ÷ 4 = 2; 2 × 3 = 6."],
+["Qual representa três partes de quatro?",["4/3","3/4","1/4","3/3"],1,"O numerador indica as partes consideradas."],
+["Quanto é 2/5 + 1/5?",["3/10","2/5","3/5","1/5"],2,"Com denominadores iguais, somamos 2 + 1."],
+["Qual fração equivale a 2/3?",["4/6","3/5","2/6","5/6"],0,"Multiplicando ambos por 2, temos 4/6."],
+["Quanto é 1 - 1/4?",["1/4","2/4","3/4","4/4"],2,"1 inteiro = 4/4; então 4/4 - 1/4 = 3/4."],
+["Qual é o numerador de 5/8?",["8","5","13","3"],1,"O numerador fica acima da barra."],
+["Qual é o denominador de 3/7?",["3","4","7","10"],2,"O denominador fica abaixo da barra."],
+["Quanto é 2/4 simplificado?",["1/2","2/3","1/4","4/2"],0,"Divida numerador e denominador por 2."],
+["Quanto é 1/3 + 1/3?",["1/6","2/3","1/3","3/3"],1,"Somando os numeradores, temos 2/3."],
+["Qual fração é menor?",["3/4","1/4","2/4","4/4"],1,"Com denominadores iguais, o menor numerador indica a menor fração."],
+["Comeu 2 de 8 fatias. Qual fração comeu?",["2/8","8/2","1/8","6/2"],0,"Foram comidas 2 das 8 fatias: 2/8."],
+["Quanto é 1/2 de 10?",["2","5","10","20"],1,"Metade de 10 é 10 dividido por 2."],
+["Qual fração equivale a um inteiro?",["1/2","2/3","5/5","3/4"],2,"Numerador e denominador iguais formam um inteiro."],
+["Quanto é 2/6 simplificado?",["1/3","1/2","2/3","3/2"],0,"Divida numerador e denominador por 2."],
+["Qual fração representa um quarto?",["4/1","1/4","2/4","1/2"],1,"Um quarto é uma de quatro partes iguais."],
+["Quanto é 3/5 de 10?",["3","5","6","8"],2,"10 ÷ 5 = 2; 2 × 3 = 6."]
+];
+const maze=[
+"################",
+"#P....#....C...#",
+"#.##..#.##.##..#",
+"#....C....#....#",
+"####.###..#.##.#",
+"#C...#....#....#",
+"#.##.#.####.##.#",
+"#....#..C......#",
+"#.######.####..#",
+"#......C......E#",
+"################"
+];
+let grid=[],player={x:1,y:1},crystals=[],pendingCrystal=null,found=0,score=0,correct=0,wrong=0,startTime=0,state='intro',current=null,choice=0,questions=[],asked=0,nickname='',sent=false;
+const tile=40,ox=0,oy=0;
+function init(){
+ grid=maze.map(r=>r.split(''));crystals=[];pendingCrystal=null;player={x:1,y:1};found=0;score=0;correct=0;wrong=0;asked=0;sent=false;nickname='';
+ grid.forEach((row,y)=>row.forEach((v,x)=>{if(v==='C')crystals.push({x,y,got:false});if(v==='P')grid[y][x]='.';}));
+ questions=[...raw].sort(()=>Math.random()-.5).slice(0,5);state='playing';startTime=Date.now();msg.textContent='Explore o labirinto e encontre os 5 cristais.';panel.textContent='Use as setas para andar. Encoste em um cristal para liberar uma questão.';draw();updateStats();
+}
+function updateStats(){stats.innerHTML=`CRISTAIS: ${found}/5<br>PONTOS: ${score}`;}
+function draw(){
+ ctx.fillStyle='#07111f';ctx.fillRect(0,0,640,420);
+ grid.forEach((row,y)=>row.forEach((v,x)=>{
+ let px=x*40,py=y*38;
+ if(v==='#'){ctx.fillStyle='#173d65';ctx.fillRect(px,py,40,38);ctx.fillStyle='#245681';ctx.fillRect(px+4,py+4,32,30);}
+ else {ctx.fillStyle='#0b1728';ctx.fillRect(px,py,40,38);if(v==='E'){ctx.fillStyle=found===5?'#35dc82':'#536477';ctx.fillRect(px+8,py+5,24,28);ctx.fillStyle='#07111f';ctx.fillRect(px+15,py+13,10,20);}}
+ }));
+ crystals.forEach(c=>{if(!c.got){ctx.fillStyle='#ffe66d';ctx.fillRect(c.x*40+13,c.y*38+10,14,14);ctx.fillStyle='#fff5b1';ctx.fillRect(c.x*40+17,c.y*38+6,6,22);}});
+ ctx.fillStyle='#35dc82';ctx.fillRect(player.x*40+8,player.y*38+7,24,24);ctx.fillStyle='#07111f';ctx.fillRect(player.x*40+13,player.y*38+13,4,4);ctx.fillRect(player.x*40+23,player.y*38+13,4,4);
+ if(state==='intro'||state==='done'||state==='name'){
+ ctx.fillStyle='rgba(3,10,20,.92)';ctx.fillRect(70,95,500,230);ctx.strokeStyle='#35dc82';ctx.lineWidth=3;ctx.strokeRect(70,95,500,230);
+ ctx.textAlign='center';ctx.fillStyle='#ffe66d';ctx.font='bold 28px monospace';
+ ctx.fillText(state==='intro'?'PRONTO PARA JOGAR?':state==='name'?'FIM DE JOGO':'LABIRINTO CONCLUÍDO!',320,145);
+ ctx.fillStyle='#fff';ctx.font='18px monospace';
+ if(state==='intro'){ctx.fillText('Encontre cristais e responda frações.',320,190);ctx.fillText('Pressione X para começar',320,235);}
+ if(state==='name'){ctx.fillText('Digite seu apelido (A-Z, 0-9, até 9).',320,190);ctx.fillText('> '+nickname+'_',320,235);ctx.fillText('Enter para enviar placar',320,275);}
+ if(state==='done'){ctx.fillText(`Pontos: ${score}   Acertos: ${correct}   Erros: ${wrong}`,320,200);ctx.fillText('Pressione X para jogar novamente',320,250);}
+ ctx.textAlign='left';
+ }
+}
+function question(){
+ current=questions[asked%questions.length];choice=0;state='question';
+ msg.textContent=`CRISTAL ${found}/5 — ${current[0]}`;
+ panel.innerHTML=current[1].map((a,i)=>`${i===choice?'▶':'　'} ${i+1}. ${a}`).join('<br>');
+ drawQuestion();
+}
+function drawQuestion(){
+ draw();ctx.fillStyle='rgba(3,10,20,.94)';ctx.fillRect(55,70,530,285);ctx.strokeStyle='#ffe66d';ctx.lineWidth=3;ctx.strokeRect(55,70,530,285);
+ ctx.fillStyle='#ffe66d';ctx.font='bold 20px monospace';ctx.fillText('QUESTÃO DE FRAÇÕES',80,105);
+ ctx.fillStyle='#fff';ctx.font='18px monospace';wrap(current[0],80,145,470,25);
+ current[1].forEach((a,i)=>{ctx.fillStyle=i===choice?'#35dc82':'#dbeafe';ctx.fillText(`${i===choice?'▶':' '} ${i+1}. ${a}`,90,220+i*30);});
+ ctx.fillStyle='#9fb3c8';ctx.font='14px monospace';ctx.fillText('↑ ↓ escolher   ENTER confirmar',100,330);
+}
+function wrap(text,x,y,max,line){let words=text.split(' '),s='';for(const w of words){let t=s+w+' ';if(ctx.measureText(t).width>max){ctx.fillText(s,x,y);s=w+' ';y+=line;}else s=t;}ctx.fillText(s,x,y);}
+function move(dx,dy){
+ let nx=player.x+dx,ny=player.y+dy;if(!grid[ny]||grid[ny][nx]==='#')return;
+ if(grid[ny][nx]==='E'){if(found===5)finish();else{msg.textContent='A saída só abre após encontrar os 5 cristais.';}return;}
+ player={x:nx,y:ny};
+ const c=crystals.find(c=>!c.got&&c.x===nx&&c.y===ny);
+ if(c){pendingCrystal=c;asked++;question();return;}
+ draw();
+}
+function answer(){let ok=choice===current[2];if(ok){correct++;score+=100;if(pendingCrystal&&!pendingCrystal.got){pendingCrystal.got=true;found++;}msg.textContent='Correto! Cristal conquistado. '+current[3];}else{wrong++;msg.textContent='Ainda não! '+current[3]+' Resposta correta: '+current[1][current[2]]+'. O cristal continua no labirinto; tente novamente.';}
+ panel.textContent='Pressione Enter para continuar. Errar não encerra a partida.';
+ state='feedback';updateStats();draw();}
+function finish(){state='name';msg.textContent='Você encontrou a saída!';panel.textContent='Digite seu apelido no teclado e pressione Enter.';draw();}
+function emitScore(){
+ if(sent)return;sent=true;
+ const payload={tipo:'PLACAR',jogo:'caca-fracao-teste',versao:'1.0.0',jogador:nickname||'ANONIMO',pontos:score,duracao_s:Math.max(1,Math.round((Date.now()-startTime)/1000)),acertos:correct,erros:wrong,tema:'Matemática - frações'};
+ window.parent.postMessage(payload,'*');
+ msg.textContent='Placar enviado ao fliperama (postMessage).';panel.textContent='Pressione X para jogar novamente.';state='done';draw();
+}
+window.addEventListener('message',e=>{if(e.data&&e.data.tipo==='ARCADE_INIT'){/* A sessão não guarda dados pessoais. */}});
+window.addEventListener('keydown',e=>{
+ if(e.repeat)return; // evita que segurar uma tecla dispare várias ações
+ const k=e.key;
+ if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','Enter'].includes(k))e.preventDefault();
+ if(state==='intro'){if(k.toLowerCase()==='x'||k==='Enter')init();return;}
+ if(state==='done'){if(k.toLowerCase()==='x'||k==='Enter'){state='intro';msg.textContent='Encontre os cristais e responda às questões.';draw();}return;}
+ if(state==='playing'){if(k==='ArrowUp')move(0,-1);if(k==='ArrowDown')move(0,1);if(k==='ArrowLeft')move(-1,0);if(k==='ArrowRight')move(1,0);return;}
+ if(state==='question'){if(k==='ArrowUp')choice=(choice+3)%4;if(k==='ArrowDown')choice=(choice+1)%4;if(k==='Enter')answer();drawQuestion();panel.innerHTML=current[1].map((a,i)=>`${i===choice?'▶':'　'} ${i+1}. ${a}`).join('<br>');return;}
+ if(state==='feedback'){if(k==='Enter'){state='playing';if(found>=5){msg.textContent='Todos os cristais encontrados! Vá até a saída verde.';}else if(pendingCrystal&&!pendingCrystal.got){msg.textContent='Volte ao cristal amarelo e tente a questão novamente.';pendingCrystal=null;}else{pendingCrystal=null;}draw();}return;}
+ if(state==='name'){
+ if(k==='Enter'){emitScore();return;}
+ if(k==='Backspace'){nickname=nickname.slice(0,-1);draw();return;}
+ if(/^[a-zA-Z0-9]$/.test(k)&&nickname.length<9){nickname+=k.toUpperCase();draw();}
+ }
+});
+draw();
+})();
+</script></body></html>

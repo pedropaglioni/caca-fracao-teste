@@ -1,0 +1,266 @@
+{
+  "tema": "Matemática - frações",
+  "nivel": "ensino fundamental II",
+  "questoes": [
+    {
+      "id": "q01",
+      "enunciado": "Qual fração representa metade? ",
+      "alternativas": [
+        "1/3",
+        "1/2",
+        "2/3",
+        "1/4"
+      ],
+      "correta": 1,
+      "explicacao": "Metade significa dividir algo em duas partes iguais e considerar uma.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q02",
+      "enunciado": "Qual fração é equivalente a 1/2?",
+      "alternativas": [
+        "2/3",
+        "2/4",
+        "3/5",
+        "1/3"
+      ],
+      "correta": 1,
+      "explicacao": "Multiplicando numerador e denominador de 1/2 por 2, obtemos 2/4.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q03",
+      "enunciado": "Quanto é 1/4 + 1/4?",
+      "alternativas": [
+        "1/2",
+        "1/4",
+        "2/8",
+        "1"
+      ],
+      "correta": 0,
+      "explicacao": "Somamos os numeradores quando os denominadores são iguais: 2/4 = 1/2.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q04",
+      "enunciado": "Qual é maior?",
+      "alternativas": [
+        "1/3",
+        "1/2",
+        "São iguais",
+        "Não é possível saber"
+      ],
+      "correta": 1,
+      "explicacao": "Metade é maior que um terço.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q05",
+      "enunciado": "Quanto é 3/4 de 8?",
+      "alternativas": [
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "correta": 2,
+      "explicacao": "8 dividido por 4 é 2; 2 vezes 3 é 6.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q06",
+      "enunciado": "Qual fração representa três partes de quatro?",
+      "alternativas": [
+        "4/3",
+        "3/4",
+        "1/4",
+        "3/3"
+      ],
+      "correta": 1,
+      "explicacao": "O numerador indica as partes consideradas e o denominador o total de partes iguais.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q07",
+      "enunciado": "Quanto é 2/5 + 1/5?",
+      "alternativas": [
+        "3/10",
+        "2/5",
+        "3/5",
+        "1/5"
+      ],
+      "correta": 2,
+      "explicacao": "Com denominadores iguais, somamos 2 + 1 e mantemos o denominador 5.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q08",
+      "enunciado": "Qual fração equivale a 2/3?",
+      "alternativas": [
+        "4/6",
+        "3/5",
+        "2/6",
+        "5/6"
+      ],
+      "correta": 0,
+      "explicacao": "Multiplicar numerador e denominador por 2 transforma 2/3 em 4/6.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q09",
+      "enunciado": "Quanto é 1 - 1/4?",
+      "alternativas": [
+        "1/4",
+        "2/4",
+        "3/4",
+        "4/4"
+      ],
+      "correta": 2,
+      "explicacao": "Um inteiro equivale a 4/4; 4/4 - 1/4 = 3/4.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q10",
+      "enunciado": "Qual é o numerador de 5/8?",
+      "alternativas": [
+        "8",
+        "5",
+        "13",
+        "3"
+      ],
+      "correta": 1,
+      "explicacao": "O numerador é o número escrito acima da barra: 5.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q11",
+      "enunciado": "Qual é o denominador de 3/7?",
+      "alternativas": [
+        "3",
+        "4",
+        "7",
+        "10"
+      ],
+      "correta": 2,
+      "explicacao": "O denominador é o número abaixo da barra: 7.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q12",
+      "enunciado": "Quanto é 2/4 simplificado?",
+      "alternativas": [
+        "1/2",
+        "2/3",
+        "1/4",
+        "4/2"
+      ],
+      "correta": 0,
+      "explicacao": "Dividindo numerador e denominador por 2, obtemos 1/2.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q13",
+      "enunciado": "Quanto é 1/3 + 1/3?",
+      "alternativas": [
+        "1/6",
+        "2/3",
+        "1/3",
+        "3/3"
+      ],
+      "correta": 1,
+      "explicacao": "Somando os numeradores, 1/3 + 1/3 = 2/3.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q14",
+      "enunciado": "Qual fração é menor?",
+      "alternativas": [
+        "3/4",
+        "1/4",
+        "2/4",
+        "4/4"
+      ],
+      "correta": 1,
+      "explicacao": "Com denominadores iguais, a fração com menor numerador é menor.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q15",
+      "enunciado": "Uma pizza tem 8 fatias; você come 2. Qual fração comeu?",
+      "alternativas": [
+        "2/8",
+        "8/2",
+        "1/8",
+        "6/2"
+      ],
+      "correta": 0,
+      "explicacao": "Foram comidas 2 das 8 fatias: 2/8, equivalente a 1/4.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q16",
+      "enunciado": "Quanto é 1/2 de 10?",
+      "alternativas": [
+        "2",
+        "5",
+        "10",
+        "20"
+      ],
+      "correta": 1,
+      "explicacao": "Metade de 10 é 10 dividido por 2, ou seja, 5.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q17",
+      "enunciado": "Qual fração é igual a um inteiro?",
+      "alternativas": [
+        "1/2",
+        "2/3",
+        "5/5",
+        "3/4"
+      ],
+      "correta": 2,
+      "explicacao": "Quando numerador e denominador são iguais, a fração vale 1.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q18",
+      "enunciado": "Quanto é 2/6 simplificado?",
+      "alternativas": [
+        "1/3",
+        "1/2",
+        "2/3",
+        "3/2"
+      ],
+      "correta": 0,
+      "explicacao": "Dividindo numerador e denominador por 2, obtemos 1/3.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q19",
+      "enunciado": "Qual fração representa um quarto?",
+      "alternativas": [
+        "4/1",
+        "1/4",
+        "2/4",
+        "1/2"
+      ],
+      "correta": 1,
+      "explicacao": "Um quarto é uma parte de um total dividido em quatro partes iguais.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    },
+    {
+      "id": "q20",
+      "enunciado": "Quanto é 3/5 de 10?",
+      "alternativas": [
+        "3",
+        "5",
+        "6",
+        "8"
+      ],
+      "correta": 2,
+      "explicacao": "10 dividido por 5 é 2; 2 vezes 3 é 6.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o"
+    }
+  ]
+}

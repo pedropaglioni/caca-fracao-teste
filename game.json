@@ -1,0 +1,17 @@
+{
+  "id": "caca-fracao-teste",
+  "nome": "Caça-Fração",
+  "versao": "1.0.0",
+  "autores": [
+    "Equipe Recreio Arcade - jogo de teste"
+  ],
+  "descricao": "Um mini labirinto educativo: encontre os cristais e responda perguntas de matemática para abrir a saída.",
+  "controles": "Setas: mover e escolher resposta; Enter: confirmar; X: iniciar/reiniciar.",
+  "entrada": "index.html",
+  "capa": "capa.png",
+  "classico_referencia": "Pac-Man (referência de labirinto; arte e personagens originais)",
+  "mecanica": "labirinto",
+  "tema": "Matemática - frações",
+  "nivel": "ensino fundamental II",
+  "questoes": "questoes.json"
+}
